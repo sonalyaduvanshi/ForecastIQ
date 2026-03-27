@@ -20,6 +20,10 @@ An end-to-end data science and analytics project to analyze customer behavior an
 - Identify high-risk customers
 - Improve retention strategies
 - Optimize revenue decisions
+  
+🌐 Live Demo
 
+🚀 Experience the live application here:  
+🔗 https://customer-intelligence-platform-23.streamlit.app
 
 
