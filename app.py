@@ -3,7 +3,12 @@ import pandas as pd
 import joblib
 
 
-st.set_page_config(page_title="Customer Intelligence Platform", layout="wide")
+st.set_page_config(
+    page_title="Customer Intelligence Platform",
+    page_icon="📊",
+    layout="wide"
+)
+
 
 st.markdown("""
     <style>
@@ -18,20 +23,30 @@ st.markdown("""
         background-color: #00ADB5;
         color: white;
         border-radius: 10px;
+        height: 3em;
+        width: 100%;
     }
     </style>
 """, unsafe_allow_html=True)
 
 
-model = joblib.load("churn_model.pkl") 
-columns = joblib.load("columns.pkl") 
+with st.spinner(" Loading AI Model..."):
+    model = joblib.load("churn_model.pkl")
+    columns = joblib.load("columns.pkl")
+    df = pd.read_csv("WA_Fn-UseC_-Telco-Customer-Churn.csv")
 
-df = pd.read_csv("WA_Fn-UseC_-Telco-Customer-Churn.csv") 
-
+st.success(" App Loaded Successfully!")
 
 st.title("Customer Intelligence Platform")
-st.subheader("Developed by Sonal Yaduvanshi | B.Tech CSE, PSIT Kanpur")
-st.write("Analyze customer behavior & predict churn using AI")
+
+st.markdown("""
+### Predict Customer Churn with AI
+
+This platform helps businesses:
+- Identify high-risk customers
+- Improve retention strategies
+- Make data-driven decisions
+""")
 
 
 st.sidebar.title("Navigation")
@@ -48,7 +63,7 @@ if option == "Dashboard":
 
     st.markdown("---")
 
-    st.subheader("Churn Distribution")
+    st.subheader(" Churn Distribution")
     st.bar_chart(df['Churn'].value_counts())
 
     st.subheader("Churn by Contract Type")
@@ -56,29 +71,46 @@ if option == "Dashboard":
     st.bar_chart(contract)
 
     st.subheader("Monthly Charges Distribution")
-    st.bar_chart(df['MonthlyCharges'])
+    st.line_chart(df['MonthlyCharges'])
 
     st.markdown("---")
 
-    st.subheader("Key Insights")
-    st.write("• Month-to-month customers churn more")
-    st.write("• Higher monthly charges increase churn risk")
-    st.write("• Fiber optic users show higher churn")
+    st.subheader(" Key Insights")
+    st.info("""
+    • Month-to-month customers churn more  
+    • Higher monthly charges increase churn risk  
+    • Fiber optic users show higher churn  
+    """)
 
-# ------------------ DATA ------------------
 elif option == "Data":
-    st.header("Dataset Preview")
-    st.write("Dataset Shape:", df.shape)
+    st.header(" Dataset Preview")
+
+    st.write("Shape of Dataset:", df.shape)
     st.dataframe(df.head(50))
 
-# ------------------ PREDICTION ------------------
+    csv = df.to_csv(index=False).encode('utf-8')
+    st.download_button(
+        label="⬇️ Download Dataset",
+        data=csv,
+        file_name="customer_data.csv",
+        mime='text/csv'
+    )
+
+
 elif option == "Prediction":
-    st.header("Customer Churn Prediction")
+    st.header(" Customer Churn Prediction")
 
-    tenure = st.slider("Tenure (Months)", 0, 72)
-    monthly = st.number_input("Monthly Charges", 0)
+    st.info("Fill details below to predict customer churn")
 
-    if st.button("Predict"):
+    col1, col2 = st.columns(2)
+
+    with col1:
+        tenure = st.slider("Tenure (Months)", 0, 72)
+
+    with col2:
+        monthly = st.number_input("Monthly Charges", 0)
+
+    if st.button("Predict Churn"):
         input_df = pd.DataFrame({
             "tenure": [tenure],
             "MonthlyCharges": [monthly]
@@ -94,16 +126,17 @@ elif option == "Prediction":
         else:
             st.success("Safe: Customer will stay")
 
-        st.write("Model Accuracy: ~85%")
-        st.download_button("Download Dataset", df.to_csv())
+        st.markdown("### Model Performance")
+        st.write("Accuracy: ~85%")
 
-# ------------------ FOOTER ------------------
+
 st.markdown("---")
 
-st.markdown(
-    "Developed by **Sonal Yaduvanshi**  \n"
-    "B.Tech CSE, PSIT Kanpur  \n"
-    "Email: [sonalyaduvanshi.2k25@gmail.com](mailto:sonalyaduvanshi.2k25@gmail.com)  \n"
-    "GitHub: [github.com/sonalyaduvanshi](https://github.com/sonalyaduvanshi)  \n"
-    "LinkedIn: [linkedin.com/in/sonal2311](https://www.linkedin.com/in/sonal2311)"
-)
+st.markdown("""
+ **Developed by Sonal Yaduvanshi**  
+B.Tech CSE, PSIT Kanpur  
+
+Email: sonalyaduvanshi.2k25@gmail.com  
+GitHub: https://github.com/sonalyaduvanshi  
+LinkedIn: https://www.linkedin.com/in/sonal2311
+""")
