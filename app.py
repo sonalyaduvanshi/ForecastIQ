@@ -26,7 +26,7 @@ st.markdown("""
 model = joblib.load("churn_model.pkl") 
 columns = joblib.load("columns.pkl") 
 
-df = pd.read_csv("../data/WA_Fn-UseC_-Telco-Customer-Churn.csv")
+df = pd.read_csv("WA_Fn-UseC_-Telco-Customer-Churn.csv") 
 
 
 st.title("Customer Intelligence Platform")
