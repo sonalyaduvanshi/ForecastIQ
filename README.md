@@ -1,4 +1,4 @@
-🚀 ForecastIQ |Customer Intelligence Platform
+🚀 ForecastIQ | Customer Intelligence Platform
 
 📌 Overview
 An end-to-end data science and analytics project to analyze customer behavior and predict churn using machine learning and interactive dashboards.
